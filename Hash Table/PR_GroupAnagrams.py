@@ -10,32 +10,36 @@ You need to implement the group_anagrams(strings) function and return a list of 
 
 """
 
+# SOLUTION solved in O(n * k log k) time and O(n) space, where n is the length of the input array and k is the maximum length of a string in the input array
+
 
 def group_anagrams(strings):
-    finalList = []
-    arr_strings = strings
+    g_a = {}
 
-    while len(arr_strings) != 0:
-        anagram_List = []
-        anagram_List.append(arr_strings[0])
+    # for each string in the list
+    for s in strings:
+        # sort the string and add it to the dictionary
+        cannonical = "".join(sorted(s))
+        # if the sorted string is already in the dictionary, append the string to the list
+        if cannonical in g_a:
+            g_a[cannonical].append(s)
+        # else, add the sorted string as a key and the string as a value
+        else:
+            g_a[cannonical] = [s]
 
-        d = dict(Counter(arr_strings[0]))
+    return list(g_a.values())
 
-        if len(arr_strings) == 1:
-            finalList.append(anagram_List)
-            break
 
-        for i in range(1, len(arr_strings)):
-            d2 = dict(Counter(arr_strings[i]))
-
-            if d == d2:
-                del arr_strings[i]
-                anagram_List.append(arr_strings[i])
-
-        del arr_strings[0]
-        finalList.append(anagram_List)
-
-    return finalList
+"""
+SOLUTION EXPLAINED:
+The group_anagrams function takes an array of strings as input and groups the anagrams together using a hash table (dictionary). Here's an explanation of how the function works:
+The function creates an empty hash table called anagram_groups to store the groups of anagrams.
+The function loops through each string in the input array and sorts the characters in each string to get its canonical form.  In the context of this code, "canonical" means the standardized or normalized form of a string that can be used to compare it to other strings to see if they are anagrams. The canonical form is used as the key in the hash table.
+The value in the hash table is a list of strings.
+The function checks if the canonical form of the current string is already in the hash table. If it is, the current string is added to the existing list of anagrams in the hash table. If not, the current string is added to the hash table as a new group of anagrams.
+After the loop finishes, the function returns a list of lists containing the groups of anagrams in the input array. The output is obtained by calling the values method on the anagram_groups hash table, which returns a list of the hash table's values.
+It has a time complexity of O(n * k log k), where n is the length of the input array and k is the maximum length of a string in the input array.  The time complexity comes from sorting each string in the array, which takes O(k log k) time, and the loop that goes through each string in the array, which takes O(n) time.
+"""
 
 
 print("1st set:")
